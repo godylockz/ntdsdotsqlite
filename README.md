@@ -2,13 +2,27 @@
 
 This software can be used either directly as a CLI utility or as a library to get an SQLite database from an NTDS.DIT one. Encrypted bits can be decrypted if the associated system hive is provided altogether.
 
+This maintained fork is an offline analysis companion to NetExec and Impacket,
+not a NetExec module. Use NetExec or Impacket to acquire or dump authorized
+directory data, then use this tool when the relationships need to be queried as
+SQL. If only credential material is needed, NetExec and `secretsdump` are the
+simpler path.
+
 # Installation
 
-`python -m pip install ntdsdotsqlite`
+`python -m pip install "git+https://github.com/godylockz/ntdsdotsqlite.git"`
+
+Python 3.10 through 3.14 are supported. Python 3.15 is temporarily excluded
+because the current stable `dissect.cstruct` release uses regular-expression
+behavior removed in Python 3.15. The cap can be removed after a compatible
+stable release is available.
 
 # Usage
 
 `ntdsdotsqlite NTDS.DIT --system SYSTEM -o NTDS.sqlite`
+
+The `SYSTEM` hive is optional. Without it, encrypted credential fields remain
+encrypted in the SQLite output while directory relationships are still parsed.
 
 ```
 usage: NTDS.sqlite [-h] [--system SYSTEM] -o OUTFILE NTDS

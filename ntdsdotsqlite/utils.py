@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -- coding: utf-8 --
+"""NTDS value conversion and SQLite schema helpers."""
+
+# Imports
 from datetime import datetime, timedelta
 from collections import defaultdict
 from enum import IntFlag
@@ -15,15 +20,22 @@ def raw_to_guid(raw):
     return f"{p1}-{p2}-{p3}-{p4}-{p5}"
 
 
-# Transforms raw bytes returned by dessect to a correct SID string
+# Transforms raw bytes returned by dissect to a correct SID string
 def raw_to_sid(raw):
+    if len(raw) < 8:
+        raise ValueError("SID is shorter than its eight-byte header")
     rev = str(int(raw[0]))
     nb_dashes = int(raw[1])
+    expected_length = 8 + (nb_dashes * 4)
+    if len(raw) < expected_length:
+        raise ValueError(
+            f"SID declares {nb_dashes} sub-authorities but is truncated"
+        )
     id_auth_value = int.from_bytes(raw[2:8], "big")
     subparts = []
     for i in range(nb_dashes):
-        endianess = "big" if i == nb_dashes - 1 else "little"
-        subparts.append(str(int.from_bytes(raw[8+(i*4):8+(i*4)+4], endianess)))
+        subpart = raw[8 + (i * 4):12 + (i * 4)]
+        subparts.append(str(int.from_bytes(subpart, "little")))
     return f"S-{rev}-{id_auth_value}-{'-'.join(subparts)}"
 
 

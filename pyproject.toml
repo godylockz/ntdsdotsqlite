@@ -1,24 +1,47 @@
-[tool.poetry]
-name = "ntdsdotsqlite"
-version = "1.1.7"
-description = "A small utility to get an SQLite  database from an NTDS.DIT file."
-authors = ["Virgile Jarry <virgile@mailbox.org>"]
-readme = "README.md"
-license = "Beerware"
-homepage = "https://github.com/almandin/ntdsdotsqlite"
-repository = "https://github.com/almandin/ntdsdotsqlite"
-documentation = "https://github.com/almandin/ntdsdotsqlite/README.md"
-
-[tool.poetry.dependencies]
-python = "^3.9"
-dissect = {extras = ["ese"], version = "^3.5"}
-impacket = "^0.10"
-tqdm = "^4.65.0"
-pycryptodomex = "^3.18.0"
-
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools==84.2.1"]
+build-backend = "setuptools.build_meta"
 
-[tool.poetry.scripts]
-ntdsdotsqlite = 'ntdsdotsqlite.__main__:main'
+[project]
+name = "ntdsdotsqlite"
+version = "1.1.7.post1"
+description = "Convert an offline NTDS.DIT database into a queryable SQLite database"
+readme = "README.md"
+requires-python = ">=3.10,<3.15"
+license = {text = "Beerware"}
+authors = [
+  {name = "Virgile Jarry", email = "virgile@mailbox.org"},
+]
+classifiers = [
+  "Environment :: Console",
+  "License :: Freely Distributable",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Security",
+]
+dependencies = [
+  "dissect.esedb==3.18",
+  "impacket==0.13.1",
+  "pycryptodomex==3.24.2",
+  "six==1.17.0",
+  "tqdm==4.70.1",
+]
+
+[project.scripts]
+ntdsdotsqlite = "ntdsdotsqlite.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/godylockz/ntdsdotsqlite"
+Issues = "https://github.com/godylockz/ntdsdotsqlite/issues"
+Upstream = "https://github.com/almandin/ntdsdotsqlite"
+
+[tool.setuptools.package-data]
+ntdsdotsqlite = ["model.sql"]
+
+[tool.uv]
+package = true
